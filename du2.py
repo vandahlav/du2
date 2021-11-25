@@ -15,8 +15,9 @@ with open('prutoky.csv', encoding="utf-8") as csvfile, open("vystup_7dni.csv", "
 
     #lines= len(list(reader))    #počet řádků 
     #print(lines)
-
-    #cyklus pro procházení souboru
+    
+    """
+    #cyklus pro procházení souboru - výpočet sedmidenních průtoků
     for row in reader:
         zbyle_dny += 1
         #zápis prvního dne v týdnu
@@ -30,30 +31,38 @@ with open('prutoky.csv', encoding="utf-8") as csvfile, open("vystup_7dni.csv", "
         #výpočet průtoku v průběhu týdne 
         if  pocet_dni % 7 == 6:
             vysledek = prutok / 7
-            prutok = 0
-            zbyle_dny = 0 
             prvniDenVtydnu[5] = f" {vysledek:.4f}"
             writer_7dni.writerow(prvniDenVtydnu)
-            print(vysledek) #SMAZAT POTOM
+            prutok = 0
+            zbyle_dny = 0 
             vysledek = 0
-        pocet_dni += 1  
+        pocet_dni += 1 
     #výpočet průtoku za zbylé dny
     if pocet_dni % 7 != 6:
         vysledek = prutok / zbyle_dny
         prvniDenVtydnu[5] = f" {vysledek:.4f}"
-        print(vysledek)
-
+    """
     #nastavení proměnných pro výpočet ročních průtoků
-    rok = 0
-    dny_vroce= 0
-    citac_roku = 0
+    dnyVroce= 0
+    pocetRoku = 0
+    pocitanyRok = 0
+    prutok_rok = 0
+    aktualizovanyRok = 0
 
-    for row in reader:
-    #pro roky
-        if citac_roku == rok:
+    #cyklus pro procházení souboru - výpočet ročních průtoků
+    for row in reader: 
+        aktualizovanyRok = int(row[2])
+        print(aktualizovanyRok)
+        if pocitanyRok == aktualizovanyRok:
             prvniDenVroce = row
-        if citac_roku != rok:
-            vysledek_2 = rok / dny_vroce
-            prvniDenVroce = row
-            citac_roku = 0
-        dny_vroce = dny_vroce + 1
+        try:
+            prutok_rok += float(row[5])
+        except ValueError:
+            print("Something's wrong.")
+        dnyVroce += 1 
+        if pocitanyRok != aktualizovanyRok:
+            vysledek_rok = prutok_rok / dnyVroce
+            print(vysledek_rok)
+            prutok_rok = 0
+            vyslede_rok = 0   
+          
