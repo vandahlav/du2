@@ -1,4 +1,5 @@
 import csv
+
 try: 
     #načtení a otevření souborů 
     with open("vstup.csv", encoding="utf-8") as csvfile,\
@@ -12,18 +13,21 @@ try:
         pocet_dni = 0 
         prutok = 0
         prutok_rok = 0
-        zbyleDnyVroce = 0 
-        zbyleDny = 1
+        zbyleDnyVroce = 1
+        zbyleDny = 0
     
         #cyklus pro procházení souboru
         for row in reader:
-            zbyleDnyVroce += 1
             rokProPorovnani = int(row[2])
 
             #zápis prvního dne v týdnu
             if pocet_dni % 7 == 0:
                 prvniDenVtydnu = row
-
+            try:
+                prvniRadek = float(row[5])
+            except ValueError:
+                print("Na prvním řádku vstupního souboru jsou chybně zadána data. Program řádek přeskočí.")
+                continue
             #nastavení aktuálního počítaného roku
             if pocet_dni == 0:
                 pocitanyRok = rokProPorovnani
@@ -36,35 +40,36 @@ try:
                 prutok += float(row[5])
                 prutok_rok += float(row[5])
                 posledniPrutok = float(row[5])
+                zbyleDnyVroce += 1
+                zbyleDny += 1
             except ValueError:
-                print("Na řádku", pocet_dni + 1, "jsou chybně zadaná data. Program řádek nebude započítávat.")
-
+                print("Na řádku", pocet_dni + 1, "jsou chybně zadaná data. Program řádek nezapočítá.")
+                           
             #upozornění na chyby ve vstupních datech
             if posledniPrutok == 0:
                 print(f"Na řádku {pocet_dni + 1} je nulová hodnota průtoku.")
             elif posledniPrutok < 0:
                 print(f"Na řádku {pocet_dni + 1} jsou záporné hodnoty průtoku. Hodnota průtoku je: {posledniPrutok}")
-
+            
             #výpočet průtoku v průběhu týdne 
             if  pocet_dni % 7 == 6:
-                vysledek = prutok / 7
+                vysledek = prutok / zbyleDny
                 prvniDenVtydnu[5] = f" {vysledek:.4f}"
                 writer_7dni.writerow(prvniDenVtydnu)
                 prutok = 0
-                zbyleDnyVroce = 0 
+                zbyleDny = 0 
             pocet_dni += 1
 
             #výpočet ročních průtoků
             if pocitanyRok != rokProPorovnani:
-                vysledny_prutok = (prutok_rok - posledniPrutok) / (zbyleDny - 1)  #zajištění, aby program počítal včetně posledního dne v roce
+                vysledny_prutok = (prutok_rok - posledniPrutok) / (zbyleDnyVroce - 1)  #zajištění, aby program počítal včetně posledního dne v roce
                 prvniDenVroce[5] = f" {vysledny_prutok:.4f}"
                 writer_rok.writerow(prvniDenVroce)
                 prutok_rok = 0
-                zbyleDny = 1
+                zbyleDnyVroce = 1
                 pocitanyRok = rokProPorovnani
                 prvniDenVroce = row
                 prutok_rok = posledniPrutok
-            zbyleDny += 1
 
         #výpočet minima a maxima
             if posledniPrutok < min_prutok and posledniPrutok > 0:
@@ -76,13 +81,13 @@ try:
 
         #výpočet průtoku za zbylé dny
         if (pocet_dni - 1) % 7 != 6:   
-            vysledek = prutok / zbyleDnyVroce
+            vysledek = prutok / zbyleDny
             prvniDenVtydnu[5] = f" {vysledek:.4f}"
             writer_7dni.writerow(prvniDenVtydnu)
 
         #výpočet průtoku pro poslední rok (zbylé dny)
         if pocitanyRok == rokProPorovnani:
-            vysledny_prutok = prutok_rok / (zbyleDny - 1)   
+            vysledny_prutok = prutok_rok / (zbyleDnyVroce- 1)   
             prvniDenVroce[5] = f" {vysledny_prutok:.4f}"
             writer_rok.writerow(prvniDenVroce)
 
@@ -91,3 +96,5 @@ try:
 
 except FileNotFoundError:
     print("Vstupní soubor se nepodařilo načíst. Ujistěte se, že daný soubor existuje, případně zda je k němu zadána korektní cesta")
+except PermissionError:
+    print("Program nemá přístup k zápisu výstupních souborů.")
