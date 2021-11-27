@@ -1,4 +1,4 @@
-# Domácí úkol 1 - průměrné sedmidenní a roční průtoky
+# Domácí úkol 2 - průměrné sedmidenní a roční průtoky
 # Zadání 
 Napište program, který načte historická data o průměrných denních průtocích a spočítá roční a sedmidenní průměry. Program bude neinteraktivní.
 
