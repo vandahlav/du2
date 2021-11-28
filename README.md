@@ -11,4 +11,4 @@ Pomocí for cyklu prochází program jednotlivé řádky. Zde jsou do výše def
 
 Výpočet maximálního a minimálního průtoku je v rámci téhož for cyklu, kdy pokud je aktuální průtok (tedy posledniPrutok) větší než předešlá hodnota průtoku, přepíše se původní průtok na aktuální a zároveň se do proměnné uloží celý řádek s aktuálním nejvyšším průtokem. Stejný princip platí i pro výpočet minima. Tyto hdonoty jsou následně vypsány do konzole. 
 
-Nakonec dojde k výpočtu průměrných průtoků za zbylé dny se sedmidenním průměrem a s ročním průměrem. Zde není průtok dělen 7 (v případě sedmidenních průtoků), ale zbylými dny. 
+Nakonec dojde k výpočtu průměrných průtoků za zbylé dny se sedmidenním průměrem a s ročním průměrem. Zde není průtok dělen 7 (v případě sedmidenních průtoků), ale zbylými dny.  
