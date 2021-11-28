@@ -85,7 +85,7 @@ try:
             prvniDenVtydnu[5] = f" {vysledek:.4f}"
             writer_7dni.writerow(prvniDenVtydnu)
 
-        #výpočet průtoku pro poslední rok (zbylé dny)
+        #výpočet průtoku pro poslední rok (zbylé dny v Roce)
         if pocitanyRok == rokProPorovnani:
             vysledny_prutok = prutok_rok / (zbyleDnyVroce- 1)   
             prvniDenVroce[5] = f" {vysledny_prutok:.4f}"
@@ -98,4 +98,3 @@ except FileNotFoundError:
     print("Vstupní soubor se nepodařilo načíst. Ujistěte se, že daný soubor existuje, případně zda je k němu zadána korektní cesta")
 except PermissionError:
     print("Program nemá přístup k zápisu výstupních souborů.")
-    kn
